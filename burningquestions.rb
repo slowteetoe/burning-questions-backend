@@ -8,6 +8,8 @@ class BurningQuestions < Sinatra::Base
 
   configure do
   	enable :logging
+  	DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.db"))
+    DataMapper.auto_upgrade!
   end
 
   before do
@@ -29,18 +31,29 @@ class BurningQuestions < Sinatra::Base
     }.to_json
   end 
 
-  get "/setupTest" do 
+  get "/setupTest" do
     p = Patient.new
     p.first_name = 'Jose'
     p.last_name = 'Cuervo'
     p.initial_clinic_visit = DateTime.now() - 63
-    p.save
-
-
+    id = p.save
+    { :contact => id }.to_json
   end
+
+  get "/contact/:contact_id/links" do
+  	Patient.all.to_json
+  end
+
+  get "/contact/:contact_id" do
+	p = Patient.new
+	p.first_name = "Jose"
+	p.last_name = "Cuervo"
+	p.to_json
+  end
+
   get "/contact/:first/:last" do
   	[
-	   {
+  	   {
 	      "id" => 1,
 	      "firstName" => "Rich",
 	      "lastName" => "Hoppes"
@@ -108,11 +121,4 @@ class Test
   property :test_date, Text
 end
 
-
-
-
-
-
-
-# create (456 {first_name: "Jose", last_name: "Cuervo", initial_clinic_visit: "2013-02-23T11:45:09-08:00")
-
+DataMapper.auto_upgrade!
