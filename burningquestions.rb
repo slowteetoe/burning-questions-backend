@@ -1,6 +1,10 @@
+require 'sinatra/base'
+require 'sinatra/reloader'
 require 'json'
 
 class BurningQuestions < Sinatra::Base
+  register Sinatra::Reloader
+
   get "/patient/:patient_id" do
     {
       :patient => { :id => params[:patient_id], :first_name => "Jose", :last_name => "Cuervo", :initial_clinic_visit => DateTime.now, :stage => { :id => 2, :symptoms_appeared => DateTime.now - 21 }, :treatments => [ ], :tests => [ :date => DateTime.now - 2, :result => "positive" ]},
@@ -10,4 +14,5 @@ class BurningQuestions < Sinatra::Base
       ]
     }.to_json
   end
+
 end
