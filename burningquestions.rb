@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
 require 'json'
 require 'sqlite3'
 # neo4j_uri = URI(ENV['NEO4J_URL'] || 'http://localhost:7474') # This is how Heroku tells us about the app.
@@ -10,6 +11,11 @@ require 'sqlite3'
 
 class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
+  register Sinatra::CrossOrigin
+
+  configure do
+  	enable :cross_origin
+  end
 
   get "/patient/:patient_id" do
     {
@@ -25,6 +31,18 @@ class BurningQuestions < Sinatra::Base
 
 
   end 
+
+  get "/contact/:first/:last" do
+  	[].to_json
+  end
+
+  post "/contact/register" do
+  	#
+  end
+
+  post "/contact/:id/details" do
+  end
+
 end
 
 # create (456 {first_name: "Jose", last_name: "Cuervo", initial_clinic_visit: "2013-02-23T11:45:09-08:00")
