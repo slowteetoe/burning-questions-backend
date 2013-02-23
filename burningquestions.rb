@@ -1,7 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'json'
-require 'sqlite3'
 # neo4j_uri = URI(ENV['NEO4J_URL'] || 'http://localhost:7474') # This is how Heroku tells us about the app.
 # neo = Neography::Rest.new(neo4j_uri.to_s) # Neography expects a string
 
