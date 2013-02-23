@@ -1,14 +1,13 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
-require 'sinatra/cross_origin'
 require 'json'
 
 class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
-  register Sinatra::CrossOrigin
 
-  configure do
-  	enable :cross_origin
+  before do
+  	response.headers["Access-Control-Allow-Origin"] = "*"
+  	response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
   end
 
   get "/patient/:patient_id" do
