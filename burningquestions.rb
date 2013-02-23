@@ -10,6 +10,10 @@ require 'json'
 class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
 
+  configure do
+  	enable :logging
+  end
+
   before do
   	response.headers["Access-Control-Allow-Origin"] = "*"
   	response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
@@ -23,22 +27,31 @@ class BurningQuestions < Sinatra::Base
         { :id => 567, :first_name => "Tom", :last_name => "Collins", :initial_clinic_visit => DateTime.now - 63, :stage => { :id=> 3, :symptoms_appeared => DateTime.now - 65 }, :treatments => [{ :date => DateTime.now - 65, :method => "Tetracycline 500 mg orally four times daily for 14 days"}], :tests => [ ], :first_contact_date => DateTime.now() - 63, :last_contact_date => DateTime.now() - 50, contact_types: ["oral"] }
       ]
     }.to_json
-  end
-
-  post "/contact/register" do
-
-
   end 
 
   get "/contact/:first/:last" do
-  	[].to_json
+  	[
+	   {
+	      "id" => 1,
+	      "firstName" => "Rich",
+	      "lastName" => "Hoppes"
+	   },
+	   {
+	      "id" => 1000,
+	      "firstName" => "Dick",
+	      "lastName" => "Hoppes"
+	   }
+	].to_json
   end
 
   post "/contact/register" do
-  	#
+  	logger.info("Registering #{params[:firstName]} #{params[:lastName]}")
+  	{ :id => 666 }.to_json
   end
 
-  post "/contact/:id/details" do
+  post "/contact/:contact_id/link/:target_id" do
+  	logger.info("Connecting #{params[:contact_id]} to #{params[:target_id]}")
+  	halt 200
   end
 
 end
