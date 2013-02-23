@@ -7,9 +7,9 @@ class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
 
   configure do
-  	enable :logging
-        DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
-        DataMapper.auto_upgrade!
+    enable :logging
+    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
+    DataMapper.auto_upgrade!
   end
 
   before do
@@ -37,6 +37,7 @@ class BurningQuestions < Sinatra::Base
     p.last_name = 'Cuervo'
     p.initial_clinic_visit = DateTime.now() - 63
     p.save
+  end
 
   get "/contact/:contact_id/links" do
   	Patient.all.to_json
