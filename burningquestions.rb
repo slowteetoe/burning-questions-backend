@@ -8,8 +8,8 @@ class BurningQuestions < Sinatra::Base
 
   configure do
   	enable :logging
-  	DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.db"))
-    DataMapper.auto_upgrade!
+        DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
+        DataMapper.auto_upgrade!
   end
 
   before do
@@ -36,9 +36,7 @@ class BurningQuestions < Sinatra::Base
     p.first_name = 'Jose'
     p.last_name = 'Cuervo'
     p.initial_clinic_visit = DateTime.now() - 63
-    id = p.save
-    { :contact => id }.to_json
-  end
+    p.save
 
   get "/contact/:contact_id/links" do
   	Patient.all.to_json
@@ -81,13 +79,16 @@ end
 class Patient
   include DataMapper::Resource
 
-  has n, :relationships
-  has n, :contacts, :through => :relationships, :model => 'Patient'
-
+  has n, :patient_relationships, :child_key => [ :patient_id ]
+  has n, :contacts, self, :through => :patient_relationships, :via => :contact
+ 
+  # property :id, Serial
+  
   has n, :treatments
   has n, :tests
 
-  property :id, Serial
+  property :patient_id, Serial
+
   property :first_name, Text
   property :last_name, Text
   property :initial_clinic_visit, DateTime
@@ -95,12 +96,13 @@ class Patient
   property :symptoms_appeared, DateTime
 end
 
-class Relationship
+class PatientRelationship
   include DataMapper::Resource
-
+ 
+  belongs_to :patient, 'Patient', :key => true
+  belongs_to :contact, 'Patient', :key => true
+ 
   property :id, Serial
-  belongs_to :patient
-  belongs_to :contact, :model => 'Patient' 
 end
 
 class Treatment
@@ -121,4 +123,3 @@ class Test
   property :test_date, Text
 end
 
-DataMapper.auto_upgrade!
