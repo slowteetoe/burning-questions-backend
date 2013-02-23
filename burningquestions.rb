@@ -1,9 +1,15 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
 require 'json'
 
 class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
+  register Sinatra::CrossOrigin
+
+  configure do
+  	enable :cross_origin
+  end
 
   get "/patient/:patient_id" do
     {
@@ -13,6 +19,17 @@ class BurningQuestions < Sinatra::Base
         { :id => 567, :first_name => "Tom", :last_name => "Collins", :initial_clinic_visit => DateTime.now - 63, :stage => { :id=> 3, :symptoms_appeared => DateTime.now - 65 }, :treatments => [{ :date => DateTime.now - 65, :method => "Tetracycline 500 mg orally four times daily for 14 days"}], :tests => [ ]}
       ]
     }.to_json
+  end
+
+  get "/contact/:first/:last" do
+  	[].to_json
+  end
+
+  post "/contact/register" do
+  	#
+  end
+
+  post "/contact/:id/details" do
   end
 
 end
