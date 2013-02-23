@@ -1,0 +1,35 @@
+#Patient 
+
+create table patient (
+    id integer primary key autoincrement,
+    first_name text,
+    last_name text,
+    initial_clinic_visit datetime,
+    stage int,
+    symptoms_appeared date
+);
+
+create table patient_contact (
+    patient_id int,
+    contact_id int,
+    first_contact date,
+    last_contact date,
+    frequency text,
+    contact_type text,
+    source int,
+    primary key (patient_id, contact_id)
+);
+
+create table patient_treatment (
+    patient_id int,
+    method text,
+    treatment_date date,
+    primary key (patient_id, treatment_date)
+);
+
+create table patient_test (
+    patient_id int,
+    test text,
+    test_date date,
+    primary key (patient_id, test_date)
+);

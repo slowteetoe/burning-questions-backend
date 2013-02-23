@@ -2,12 +2,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sinatra/cross_origin'
 require 'json'
-require 'sqlite3'
-# neo4j_uri = URI(ENV['NEO4J_URL'] || 'http://localhost:7474') # This is how Heroku tells us about the app.
-# neo = Neography::Rest.new(neo4j_uri.to_s) # Neography expects a string
-
-
-
+require 'data_mapper'
 
 class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
@@ -15,6 +10,9 @@ class BurningQuestions < Sinatra::Base
 
   configure do
   	enable :cross_origin
+
+    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.sqlite3"))    
+    DataMapper.auto_upgrade!
   end
 
   get "/patient/:patient_id" do
@@ -27,7 +25,18 @@ class BurningQuestions < Sinatra::Base
     }.to_json
   end
 
+  get "/setupTest" do 
+    p = Patient.new
+    p.first_name = 'Jose'
+    p.last_name = 'Cuervo'
+    p.initial_clinic_visit = DateTime.now() - 63
+    p.save
+
+
+  end
+
   post "/contact/register" do
+
 
 
   end 
@@ -44,6 +53,50 @@ class BurningQuestions < Sinatra::Base
   end
 
 end
+
+class Patient
+  include DataMapper::Resource
+
+  has n, :relationships
+  has n, :contacts, :through => :relationships, :model => 'Patient'
+
+  has n, :treatments
+  has n, :tests
+
+  property :first_name, Text
+  property :last_name, Text
+  property :initial_clinic_visit, DateTime
+  property :stage, Integer
+  property :symptoms_appeared, DateTime
+end
+
+class Relationship
+  include DataMapper::Resource
+
+  belongs_to :patient
+  belongs_to :contact, :model => 'Patient' 
+end
+
+class Treatment
+  include DataMapper::Resource
+
+  belongs_to :patient
+  property :method, Text
+  property :treatment_date, Text
+end
+
+class Test
+  include DataMapper::Resource
+  belongs_to :patient
+  property :test, Text
+  property :test_date, Text
+end
+
+
+
+
+
+
 
 # create (456 {first_name: "Jose", last_name: "Cuervo", initial_clinic_visit: "2013-02-23T11:45:09-08:00")
 
