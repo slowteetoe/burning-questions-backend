@@ -13,9 +13,10 @@ end
 
 RSpec.configure do |c|
   c.include RSpecMixin
+  DataMapper::Logger.new(STDOUT, :debug)  
   DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/db/burning_questions.db")
   DataMapper.finalize
-  DataMapper.auto_migrate!
+  #DataMapper.auto_migrate!
 #  Patient.auto_migrate!
 #  PatientRelationship.auto_migrate!
 #  Treatment.auto_migrate!

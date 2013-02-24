@@ -37,43 +37,51 @@ class BurningQuestions < Sinatra::Base
     p.last_name = 'Cuervo'
     p.initial_clinic_visit = DateTime.now() - 63
     p.save
-
-  get "/contact/:contact_id/links" do
-  	Patient.all.to_json
+    p.to_json
   end
 
+## Done
+  get "/contact/:contact_id/links" do
+    patient = Patient.get(params[:contact_id])
+
+  	patient.contacts.to_json
+  end
+
+## Done
   get "/contact/:contact_id" do
-	p = Patient.new
-	p.first_name = "Jose"
-	p.last_name = "Cuervo"
-	p.to_json
+    logger.info("Looking for contact id #{params[:contact_id]}")
+    patient = Patient.get(params[:contact_id])
+
+    patient.to_json
   end
 
   get "/contact/:first/:last" do
-  	[
-  	   {
-	      "id" => 1,
-	      "firstName" => "Rich",
-	      "lastName" => "Hoppes"
-	   },
-	   {
-	      "id" => 1000,
-	      "firstName" => "Dick",
-	      "lastName" => "Hoppes"
-	   }
-	].to_json
+    patients = Patient.all({ :first_name => params[:first], :last_name => params[:last]})
+
+    patients.to_json
   end
 
+
+## Done
   post "/contact/register" do
   	logger.info("Registering #{params[:firstName]} #{params[:lastName]}")
-  	{ :id => 666 }.to_json
+    p = Patient.new({:first_name => params[:firstName], :last_name => params[:lastName] }).save
+    p.to_json
   end
 
-  post "/contact/:contact_id/link/:target_id" do
-  	logger.info("Connecting #{params[:contact_id]} to #{params[:target_id]}")
+## Done
+  post "/contact/:patient_id/link/:target_id" do
+    logger.info("Connecting #{params[:patient_id]} to #{params[:target_id]}")
+    patient = Patient.get(params[:patient_id])
+    logger.info(patient.to_json)
+    target = Patient.get(params[:target_id])
+
+    patient.contacts << target
+    patient.save
+
+    logger.info(patient.contacts.to_json)
   	halt 200
   end
-
 end
 
 class Patient
@@ -102,7 +110,7 @@ class PatientRelationship
   belongs_to :patient, 'Patient', :key => true
   belongs_to :contact, 'Patient', :key => true
  
-  property :id, Serial
+  property :contact_id, Serial
 end
 
 class Treatment
@@ -122,4 +130,3 @@ class Test
   property :test, Text
   property :test_date, Text
 end
-
