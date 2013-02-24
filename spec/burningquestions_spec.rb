@@ -16,22 +16,38 @@ describe "Burning Questions" do
     last_response.body.should match(/Welcome to burning questions/)
   end
 
-  it "should store a relationship" do
-  	pending "Datamodel isn't working"
-  	get '/setupTest'
-  	pp last_response
-  	last_response.should be_ok
-  end
+#  it "should store a relationship" do
+#  	pending "Datamodel isn't working"
+#  	get '/setupTest'
+#  	pp last_response
+#  	last_response.should be_ok
+#  end
 
   describe "retrieving customer data" do
   	it "should retrieve a valid customer" do
-  	  get '/contact/1234'
+  	  get '/contact/2'
   	  pp last_response
   	  last_response.should be_ok
   	  result = JSON.parse(last_response.body)
   	  result["first_name"].should eql "Jose"
   	  result["last_name"].should eql "Cuervo"
   	end
+  end
+
+  describe "adding a new contact" do
+    it "should add a new contact" do
+      post '/contact/register?firstName=Joe&lastName=Schmoe'
+      pp last_response
+      last_response.should be_ok
+    end
+  end
+
+  describe "linking two patients" do 
+    it "should link two patients" do
+        post "/contact/6/link/7"
+        pp last_response
+        last_response.should be_ok
+    end
   end
 
 end
