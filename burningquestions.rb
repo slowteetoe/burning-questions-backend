@@ -25,7 +25,8 @@ class BurningQuestions < Sinatra::Base
     {
       :patient => { :id => params[:patient_id], :first_name => "Jose", :last_name => "Cuervo", :initial_clinic_visit => DateTime.now, :stage => { :id => 2, :symptoms_appeared => DateTime.now - 21 }, :treatments => [{ :date => DateTime.now - 1, :method => "RPR 1:8 Dkfd + Rx 2.4 BIC"}], :tests => [ :date => DateTime.now - 2, :result => "positive" ]},
       :contacts => [
-        { :id => 456, :first_name => "Harvey", :last_name => "Wallbanger", :initial_clinic_visit => nil, :stage => {}, :treatments => [ ], :tests => [], :first_contact_date => DateTime.now() - 63, :last_contact_date => DateTime.now() - 50, contact_types: ["oral"] },
+        { :id => 456, :first_name => "Harvey", :last_name => "Wallbanger", :initial_clinic_visit => nil, :stage => {}, :treatments => [ ], :tests => [], :first_contact_date => DateTime.now() - 7, :last_contact_date => DateTime.now() - 10, contact_types: ["oral"] },
+        { :id => 401, :first_name => "Mickey", :last_name => "Slim", :initial_clinic_visit => DateTime.now - 3, :stage => { :id=> 1, :symptoms_appeared => DateTime.now - 8 }, :treatments => [{ :date => DateTime.now - 3, :method => "RPR 1:32 TPPA Rx 2.4 BIC"}], :tests => [ ], :first_contact_date => DateTime.now() - 27, :last_contact_date => DateTime.now(), contact_types: ["unprotected"] },
         { :id => 567, :first_name => "Tom", :last_name => "Collins", :initial_clinic_visit => DateTime.now - 63, :stage => { :id=> 3, :symptoms_appeared => DateTime.now - 65 }, :treatments => [{ :date => DateTime.now - 65, :method => "Tetracycline 500 mg orally four times daily for 14 days"}], :tests => [ ], :first_contact_date => DateTime.now() - 63, :last_contact_date => DateTime.now() - 50, contact_types: ["oral"] }
       ]
     }.to_json

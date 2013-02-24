@@ -16,13 +16,6 @@ describe "Burning Questions" do
     last_response.body.should match(/Welcome to burning questions/)
   end
 
-#  it "should store a relationship" do
-#  	pending "Datamodel isn't working"
-#  	get '/setupTest'
-#  	pp last_response
-#  	last_response.should be_ok
-#  end
-
   describe "retrieving customer data" do
   	it "should retrieve a valid customer" do
   	  get '/contact/1'
