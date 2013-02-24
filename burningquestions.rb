@@ -8,7 +8,7 @@ class BurningQuestions < Sinatra::Base
 
   configure do
     enable :logging
-    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
+    DataMapper.setup(:default, (ENV["HEROKU_POSTGRESQL_MAROON_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
     DataMapper.auto_upgrade!
   end
 
