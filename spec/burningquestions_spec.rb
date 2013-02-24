@@ -25,12 +25,12 @@ describe "Burning Questions" do
 
   describe "retrieving customer data" do
   	it "should retrieve a valid customer" do
-  	  get '/contact/2'
+  	  get '/contact/1'
   	  pp last_response
   	  last_response.should be_ok
   	  result = JSON.parse(last_response.body)
-  	  result["first_name"].should eql "Jose"
-  	  result["last_name"].should eql "Cuervo"
+  	  result["first_name"].should eql "Joe"
+  	  result["last_name"].should eql "Schmoe"
   	end
   end
 
@@ -44,7 +44,7 @@ describe "Burning Questions" do
 
   describe "linking two patients" do 
     it "should link two patients" do
-        post "/contact/6/link/7"
+        post "/contact/1/link/2"
         pp last_response
         last_response.should be_ok
     end

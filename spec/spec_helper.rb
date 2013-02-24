@@ -16,5 +16,5 @@ RSpec.configure do |c|
   DataMapper::Logger.new(STDOUT, :debug)
   DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/db/burning_questions.db")
   DataMapper.finalize
-  DataMapper.auto_migrate!
+  DataMapper.auto_upgrade!
 end
