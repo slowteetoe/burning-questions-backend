@@ -7,9 +7,9 @@ class BurningQuestions < Sinatra::Base
   register Sinatra::Reloader
 
   configure do
-  	enable :logging
-        DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
-        DataMapper.auto_upgrade!
+    enable :logging
+    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/db/burning_questions.db"))
+    DataMapper.auto_upgrade!
   end
 
   before do
